@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-graphql-server",
-  "version": "0.0.1",
-  "description": "A Node-RED node that acts as a GraphQL Server.",
+  "version": "0.0.2",
+  "description": "A set of nodes to run a local GraphQL Server in Node-RED.",
   "readme": "README.md",
   "scripts": {
     "maps": "genmaps --sourceRoot /src/ -o html,js",
