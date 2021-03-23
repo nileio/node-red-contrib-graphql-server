@@ -26,7 +26,7 @@
     },
     "tooltip": {
       "path": "url to use for this server. Both get & post will be enabled for this route",
-      "launchgraphi": "Launch Graphi in a new window",
+      "launchgraphi": "Launch Playground in a new window",
       "schema": "GraphQL schema to use for this server. choose an existing schema or configure a new GraphQL schema",
       "graphi": "enable or disable the built-in GraphQL Explorer interface. If enabled will be available at the specified path",
       "voyager": "Launch GraphQL Voyager to explore the schema (opens in a new window)",
