@@ -13,3 +13,7 @@ or Run the following command in your Node-RED user directory - typically `~/.nod
 
 This node bundle helps you build a fully functional GraphQL Server for your application. It includes 3 nodes which together provide a full implementation
 of GraphQL specifications:
+graphql-in and graphql-out
+graphql-schema
+graphql-subscriptionserver
+
