@@ -1,0 +1,28 @@
+{
+  "graphql-schema": {
+    "label": {
+      "schema": "Schema",
+      "pagination":"Pagination specs support",
+      "cursorField": "Cursor Field",
+      "editor": "GraphQL Editor",
+      "editorendpoint": "Endpoint"
+    },
+    "placeholder": {
+      "schema": "Enter the Graphql schema.",
+      "editorendpoint": "/graphql-schema/editor",
+      "cursorField": "RowNum"
+    },
+    "tooltip": {
+      "voyager_off": "Visual Schema Editor can be enabled by adding a property to settings file.Check node info",
+      "schemaeditor": "Launch a visual schema editor for this schema (opens in a new window)"
+    },
+    "helptext": {
+      "schema": "Defines Graphql schema."
+    },
+    "errors": {
+      "internalerror": "Error: __error__",
+      "missingconfig": "Schema configuration with id __id__ is missing.",
+      "invalidschema": "GraphQL Schema \"__name__\" is invalid."
+    }
+  }
+}

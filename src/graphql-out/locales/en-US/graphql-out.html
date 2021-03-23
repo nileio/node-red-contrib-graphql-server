@@ -1,0 +1,74 @@
+<!-- English: Help text -->
+<!--
+  Copyright NileIO.io (Neil Lyon-S) [the STRANGER] and other contributors, https://github.com/nileio/node-red-contrib-graphql-nodes
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- English: Help text is provided for the node.                   -->
+
+<script type="text/x-red" data-help-name="graphql-out">
+
+   <p>Sends responses back for requests recieved from a GraphQL In node.</p>
+
+   <h3>Inputs</h3>
+   <dl class="message-properties">
+     <dt>output<span class="property-type">string</span></dt>
+     <dd> the field containing the response payload.</dd>
+   </dl>
+   <dl class="message-properties">
+     <dt>Return Format<span class="property-type">select</span></dt>
+     <dd>
+      simple formatting to change the format of <code>payload</code> before returning a response . Usually you don not need to change the format.
+
+       <ul>
+         <li><code>No Change</code> - this option is the default. No changes are made to <code>payload</code> and returns response as is.</li>
+         <li><code>JSON String</code> - returns the response <code>payload</code> as a JSON String.</li>
+         <li><code>JSON Object</code> - returns the response <code>payload</code> as a parsed JSON Object.</li>
+
+       </ul>
+
+     </dd>
+   </dl>
+   <dl class="message-properties">
+     <dt>Return Type<span class="property-type">select</span></dt>
+     <dd>
+      change the <code>payload</code> to and from an array before returning a response. This is just a shortcut rather than using multiple nodes because in many situations, it is a needed operation.
+      Use other nodes before sending a response if you intend to make a number of transformations.
+
+       <ul>
+         <li><code>As Is</code> - this option is the default. No change is done to <code>payload</code> and returns response as is.</li>
+         <li><code>Array Index</code> - returns an object from the <code>payload</code> array by using an index. Index defaults to 0 which is the first object of the array. <code>payload</code> must already be an array for this to work.</li>
+         <li><code>Array</code> - returns the response <code>payload</code> as an array. It attempts to return the object as an array.</li>
+
+       </ul>
+
+     </dd>
+   </dl>
+     <dl class="message-properties">
+     <dt>Array Index<span class="property-type">number</span></dt>
+     <dd>
+      if Array Index is selected for return, you must specifiy the index number to return. It defaults to index 0 which is the first item in the array.
+     </dd>
+   </dl>
+  <h3>Outputs</h3>
+                  <dl class="message-properties">
+                      <dt>payload <span class="property-type">object</span></dt>
+                      <dd> the completed response to send back to the response. Note: GraphQL handles query traversal and sends response back to the client on completion of all tree traversals. </dd>
+
+                  </dl>
+
+   <h3>Details</h3>
+       <p>This node must be paired with a GraphQL In node.</p>
+       <p>cheers from Neil Lyon-S - Share, Contribute & Give Back neillyon-s@gmail.com!!
+</script>

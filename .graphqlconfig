@@ -1,0 +1,15 @@
+{
+    "name": "Trading Strategy GraphQL Schema",
+    "schemaPath": "./tradingstrategy-schema.graphql",
+    "extensions": {
+        "endpoints": {
+            "dev": {
+                "url": "http://localhost:1880/graphql",
+                "subscription": {
+                    "url": "ws://localhost:1880/subscriptions"
+                },
+                "introspect": true
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+{
+  "graphql-in": {
+    "graphql-in": "/graphql",
+    "label": {
+      "path": "Path",
+      "method": "Method",
+      "schema": "Schema",
+      "graphi": "Playground",
+      "voyager": "GraphQL Voyager",
+      "resolverstype": "Resolvers",
+      "timeout": "Timeout",
+      "rootonly": "root operations only",
+      "nonscalar": "root + all nonscalar fields",
+      "selected": "root + selected fields",
+      "usedataloader": "Use Dataloader (batch parent return data)",
+      "useSubscriptionServer": "Playground subscriptions server path",
+      "subscriptionsPath": "Subscriptions path"
+    },
+    "placeholder": {
+      "path": "/graphql",
+      "port": "4000",
+      "endpoint": "/graphql",
+      "timeout": "5000",
+      "schema": "Select or Create a new Schema definition",
+      "subscriptionsPath": "leave blank to disable"
+    },
+    "tooltip": {
+      "path": "url to use for this server. Both get & post will be enabled for this route",
+      "launchgraphi": "Launch Graphi in a new window",
+      "schema": "GraphQL schema to use for this server. choose an existing schema or configure a new GraphQL schema",
+      "graphi": "enable or disable the built-in GraphQL Explorer interface. If enabled will be available at the specified path",
+      "voyager": "Launch GraphQL Voyager to explore the schema (opens in a new window)",
+      "voyager_off": "Voyager can be enabled by adding a property to settings file. Check node info.",
+      "resolverstype": "choose how to handle GraphQL queries",
+      "timeout": "timeout in milliseconds for resolver functions to return a response to client"
+    },
+    "misc": {
+      "millis": "ms",
+      "count": "Total types: "
+    },
+    "status": {
+      "running": "running",
+      "stopped": "stopped"
+    },
+    "errors": {
+      "not-created": "httpNode is disabled. httpNode must be enabled to create a GraphQL Server.",
+      "missing-path": "node enpoint is not defined. Define an endpoint for this GraphQL Server.",
+      "emptyresult": "Resolver function returned empty result.",
+      "noresolver": "No resolver function defined for this type.",
+      "timeout": "Resolver function \"__fieldPath__\" timed out after __timeout__ seconds. Do you have a flow to resolve queries for \"__fieldPath__\" ?",
+      "timeout_client": "Resolver function \"__fieldPath__\" timed out.",
+      "internalerror": "__error__",
+      "missingnode": "Node with id __id__ is missing.",
+      "duplicate-path": "Path __path__ already exists."
+    },
+    "tip": {
+      "note": "<strong>voyager: </strong><span><a href=\"#\" target=\"_blank\" id=\"gql_voyager-url\"></a></span></div>"
+    }
+  }
+}

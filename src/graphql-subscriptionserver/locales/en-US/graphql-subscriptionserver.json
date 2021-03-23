@@ -1,0 +1,19 @@
+{
+  "graphql-subscriptionserver": {
+    "graphql-subscriptionserver": "/subscriptions",
+    "label": {
+      "subscriptionspath": "Path",
+      "schema": "Schema",
+      "module": "PubSub",
+      "mqttbroker": "Broker"
+    },
+    "status":{
+      "serving": "serving __clients__"
+    },
+    "errors":{
+      "missing-config":"missing configuration.",
+      "duplicate-path": "path __path__ already exists.",
+      "no-subscription-operation": "GraphQL schema name \"__schema__\" does not include valid Subscription operations."
+    }
+  }
+}

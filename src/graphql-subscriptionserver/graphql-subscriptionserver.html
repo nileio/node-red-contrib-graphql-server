@@ -1,0 +1,95 @@
+<!--
+Licensed under the MIT License (the "License");
+
+Copyright (c) 2019 Neil Lyon-S
+and other contributors, 
+https://github.com/nileio/node-red-contrib-graphql-server
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!-- Include any static resources below this line use script and link tags . 
+    resources are loaded from static content on the server configured in settings file
+-->
+
+<script type="text/x-red" data-template-name="graphql-subscriptionserver">
+
+   <div class="form-row">
+    <label for="node-input-subscriptionspath"><i class="fa fa-globe"></i> <span data-i18n="graphql-subscriptionserver.label.subscriptionspath"></span></label>
+    <input type="text" id="node-input-subscriptionspath" data-i18n="[placeholder]graphql-subscriptionserver.placeholder.path" style="width: 50%" />
+   </div>
+   <div class="form-row">
+    <label for="node-input-module"><i class="fa fa-feed"></i> <span data-i18n="graphql-subscriptionserver.label.module"></span></label>
+    <select type="text" id="node-input-module" style="width: auto">
+      <option value="pubsubmqtt">MQTT</option>
+      <option value="pubsubredis" disabled>Redis</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-mqttbroker"><i class="fa fa-globe"></i> <span data-i18n="graphql-subscriptionserver.label.mqttbroker"></span></label>
+    <input type="text" id="node-input-mqttbroker">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-schema"><i class="fa fa-cubes"></i> <span data-i18n="graphql-subscriptionserver.label.schema"></span></label>
+    <input type="text" id="node-input-schema" data-i18n="[placeholder]graphql-subscriptionserver.placeholder.schema" />
+  </div>
+
+  <br />
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></label>
+      <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+</script>
+<script type="text/javascript">
+  RED.nodes.registerType("graphql-subscriptionserver", {
+    category: "network",
+    defaults: {
+      name: { value: "" },
+      subscriptionspath: { value: "/subscriptions", required: true },
+      module: { value: "pubsubmqtt", required: true },
+      mqttbroker: { required: true, type: "mqtt-broker" },
+      schema: {  required: true, type: "graphql-schema" },
+      
+    },
+    inputs: 0,
+    outputs: 1,
+    color: "#FFAAAA", // set background color
+    // set the icon (held in icons dir)
+    icon: "graphql-subserver.svg",
+    paletteLabel: "subscription",
+    label: function () {
+      return this.name || this.subscriptionspath;
+    },
+    labelStyle: function () {
+      // sets the class to apply to the label
+      return this.name ? "node_label_italic" : "";
+    },
+    oneditprepare: function () {
+      const node = this;
+    },
+    oneditsave: function () {
+      const node = this;
+      if (!$("#node-input-subscriptionspath").val()) $("#node-input-subscriptionspath").val("/subscriptions");
+
+    },
+  });
+
+  //# sourceURL=/src/graphql-subscriptionserver/graphql-subscriptionserver.html
+  //# sourceMappingURL=/src/graphql-subscriptionserver/graphql-subscriptionserver.html.map
+</script>

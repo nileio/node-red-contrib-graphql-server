@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/graphql-schema/editor/static/css/main.34de6062.chunk.css",
+    "main.js": "/graphql-schema/editor/static/js/main.499eab84.chunk.js",
+    "main.js.map": "/graphql-schema/editor/static/js/main.499eab84.chunk.js.map",
+    "runtime~main.js": "/graphql-schema/editor/static/js/runtime~main.ebd46fb4.js",
+    "runtime~main.js.map": "/graphql-schema/editor/static/js/runtime~main.ebd46fb4.js.map",
+    "static/js/2.93d8fa61.chunk.js": "/graphql-schema/editor/static/js/2.93d8fa61.chunk.js",
+    "static/js/2.93d8fa61.chunk.js.map": "/graphql-schema/editor/static/js/2.93d8fa61.chunk.js.map",
+    "index.html": "/graphql-schema/editor/index.html",
+    "precache-manifest.e8f58ee41e0aadfb7d97f7e2b46a8da9.js": "/graphql-schema/editor/precache-manifest.e8f58ee41e0aadfb7d97f7e2b46a8da9.js",
+    "service-worker.js": "/graphql-schema/editor/service-worker.js",
+    "static/css/main.34de6062.chunk.css.map": "/graphql-schema/editor/static/css/main.34de6062.chunk.css.map"
+  }
+}

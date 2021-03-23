@@ -1,0 +1,11 @@
+{
+  "graphql-out": {
+    "graphql-out": "resolve",
+    "label": {
+      "output": "Output",
+      "returnformat": "Format",
+      "return": "Type",
+      "returnarrayindx": "Index"
+    }
+  }
+}

@@ -1,0 +1,241 @@
+# GraphQL from graph at:
+# graphqleditor.com
+
+type Query{
+	allCustomers(
+		after : String
+		first : Int
+		before : String
+		last : Int
+	) : CustomersList
+	Customer(
+		customerId : ID!
+	) : Customer
+	allEmployees(
+		after : String
+		first : Int
+		before : String
+		last : Int
+	) : EmployeesList
+	Employee(
+		employeeId : ID!
+	) : Employee
+}
+
+"""
+A connection to a list of items.
+"""
+type CustomersList{
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo : PageInfo!
+	"""
+	A list of edges.
+	"""
+	edges : [CustomersEdge]
+	"""
+							A count of the total number of objects in this connection, ignoring pagination.
+This allows a client to fetch the first five objects by passing "5" as the
+argument to "first", then fetch the total count so it could display "5 of 83",
+for example.
+	"""
+	totalCount : Int
+	"""
+							A list of all of the objects returned in the connection. This is a convenience
+field provided for quickly exploring the API; rather than querying for
+"{ edges { node } }" when no edge data is needed, this field can be be used
+instead. Note that when clients like Relay need to fetch the "cursor" field on
+the edge to enable efficient pagination, this shortcut cannot be used, and the
+full "{ edges { node } }" version should be used instead.
+	"""
+	customers : [Customer]
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo{
+	"""
+	When paginating forwards, are there more items?
+	"""
+	hasNextPage : Boolean!
+	"""
+	When paginating backwards, are there more items?
+	"""
+	hasPreviousPage : Boolean!
+	"""
+	When paginating backwards, the cursor to continue.
+	"""
+	startCursor : String
+	"""
+	When paginating forwards, the cursor to continue.
+	"""
+	endCursor : String
+}
+
+"""
+An edge in a page.
+"""
+type CustomersEdge{
+	"""
+	The item at the end of the edge
+	"""
+	node : Customer
+	"""
+	A cursor for use in pagination
+	"""
+	cursor : String!
+}
+
+type Customer{
+	CustomerId : ID
+	FirstName : String
+	LastName : String
+	Company : String
+	Address : String
+	City : String
+	State : String
+	Country : String
+	PostalCode : String
+	Phone : String
+	Email : String
+	SupportRep : Employee
+	Invoices : [Invoice]
+}
+
+type Employee{
+	EmployeeId : ID
+	FirstName : String
+	LastName : String
+	Title : String
+	ReportsTo : Employee
+	BirthDate : Date
+	HireDate : Date
+	Address : String
+}
+
+scalar Date
+
+type Invoice{
+	InvoiceId : ID
+	Customer : Customer
+	Items : [InvoiceItem]
+	InvoiceDate : String
+	BillingAddress : String
+	BillingCity : String
+}
+
+type InvoiceItem{
+	InvoiceItemId : ID
+	Invoice : Invoice
+	Track : Track
+	UnitPrice : Int
+	Quantity : Int
+}
+
+type Track{
+	TrackId : ID
+	Name : String
+	Album : Album
+	MediaType : MediaType
+	PlayLists : [PlayList]
+	Genre : Genre
+	Composer : String
+	Milliseconds : Int
+	Bytes : Int
+	UnitPrice : Int
+}
+
+type Album{
+	AlbumId : ID
+	Title : String
+	Artist : Artist
+}
+
+type Artist{
+	ArtistId : ID
+	Name : String
+}
+
+type MediaType{
+	MediaTypeId : ID
+	name : String
+}
+
+type PlayList{
+	PlayListId : ID
+	Tracks : [Track]
+}
+
+type Genre{
+	GenreId : ID
+	name : String
+}
+
+"""
+A connection to a list of items.
+"""
+type EmployeesList{
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo : PageInfo!
+	"""
+	A list of edges.
+	"""
+	edges : [EmployeesEdge]
+	"""
+							A count of the total number of objects in this connection, ignoring pagination.
+This allows a client to fetch the first five objects by passing "5" as the
+argument to "first", then fetch the total count so it could display "5 of 83",
+for example.
+	"""
+	totalCount : Int
+	"""
+							A list of all of the objects returned in the connection. This is a convenience
+field provided for quickly exploring the API; rather than querying for
+"{ edges { node } }" when no edge data is needed, this field can be be used
+instead. Note that when clients like Relay need to fetch the "cursor" field on
+the edge to enable efficient pagination, this shortcut cannot be used, and the
+full "{ edges { node } }" version should be used instead.
+	"""
+	customers : [Customer]
+}
+
+"""
+An edge in a page.
+"""
+type EmployeesEdge{
+	"""
+	The item at the end of the edge
+	"""
+	node : Employee
+	"""
+	A cursor for use in pagination
+	"""
+	cursor : String!
+}
+
+type Mutation{
+	addCustomer(
+		input : CustomerInput
+	) : Customer
+}
+
+input CustomerInput{
+	FirstName : String
+	LastName : String
+	Company : String
+	Address : String
+	Email : String
+}
+
+type Subscription{
+	customerAdded : Customer
+}
+schema{
+	query: Query,
+	mutation: Mutation,
+	subscription: Subscription
+}

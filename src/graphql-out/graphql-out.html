@@ -1,0 +1,108 @@
+<!--
+Licensed under the MIT License (the "License");
+
+Copyright (c) 2019 Neil Lyon-S
+and other contributors, 
+https://github.com/nileio/node-red-contrib-graphql-server
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<!-- Editor HTML and client Javascript -->
+
+<script type="text/x-red" data-template-name="graphql-out">
+
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+        <label for="node-input-output"><i class="fa fa-list"></i> <span data-i18n="graphql-out.label.output"></label>
+        <input type="text" id="node-input-output" style="width: 50%;">
+        <input type="hidden" id="node-input-outputType">
+    </div>
+  <div class="form-row">
+    <label for="node-input-returnformat"><i class="fa fa-file-code-o"></i> <span data-i18n="graphql-out.label.returnformat"></span></label>
+      <select type="text" id="node-input-returnformat">
+        <option value="nochange">No Change</option>
+        <option value="jsonstring">JSON String</option>
+        <option value="jsonobject">JSON Object</option>
+      </select>
+    </div>
+  <div class="form-row">
+    <label for="node-input-return"><i class="fa fa-exchange"></i> <span data-i18n="graphql-out.label.return"></span></label>
+      <select type="text" id="node-input-return">
+        <option value="asis">As Is</option>
+        <option value="array">Array Index</option>
+        <option value="forcedarray">Array</option>
+      </select>
+  </div>
+  <div class="form-row hide" id="returnarrayindx-row">
+        <label for="node-input-returnarrayindx"><i class="fa fa-hashtag"></i> <span data-i18n="graphql-out.label.returnarrayindx"></span></label>
+        <input type="number" id="node-input-returnarrayindx" style="width: 50px;">
+  </div>
+</script>
+<script type="text/javascript">
+  RED.nodes.registerType("graphql-out", {
+    category: "network",
+    defaults: {
+      name: { value: "" },
+      output: { value: "payload" },
+      outputType: { value: "msg" },
+      returnformat: { value: "nochange", required: true },
+      return: { value: "asis", required: true },
+      returnarrayindx: {
+        value: 0,
+        required: true,
+        validate: RED.validators.number(),
+      },
+    },
+    inputs: 1, // set the number of inputs - only 0 or 1
+    outputs: 0, // set the number of outputs - 0 to n
+    color: "#FFAAAA", // set background color
+    // set the icon (held in icons dir)
+    icon: "graphql_logo_white.svg",
+    label: function () {
+      return this.name || this._("graphql-out.graphql-out");
+    },
+    paletteLabel: "graphql out",
+    labelStyle: function () {
+      // sets the class to apply to the label
+      return this.name ? "node_label_italic" : "";
+    },
+
+    oneditprepare: function () {
+      if (this.output === undefined) {
+        $("#node-input-output").val("payload");
+      }
+      $("#node-input-output").typedInput({
+        typeField: $("#node-input-outputType"),
+        types: ["msg"],
+      });
+
+      $("#node-input-return").change(function () {
+        if ($("#node-input-return").val() === "array") $("#returnarrayindx-row").show();
+        else $("#returnarrayindx-row").hide();
+      });
+    },
+    oneditsave: function () {},
+  });
+  //# sourceURL=/src/graphql-out/graphql-out.html
+  //# sourceMappingURL=/src/graphql-out/graphql-out.html.map
+</script>

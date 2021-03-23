@@ -1,0 +1,45 @@
+<!-- English: Help text -->
+<!--
+  Copyright NileIO.io (Neil Lyon-S) and other contributors, https://github.com/nileio/node-red-contrib-graphql-nodes
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- English: Help text is provided for the node.                   -->
+
+<script type="text/x-red" data-help-name="graphql-schema">
+
+  <p>Configuration to define a GraphQL schema.</p>
+
+  <h3>Inputs</h3>
+
+  <dl class="message-properties">
+    <dt>Name<span class="property-type">string</span></dt>
+    <dd> provide a name to this schema definition.</dd>
+  </dl>
+  <dl class="message-properties">
+    <dt>Schema<span class="property-type">string</span></dt>
+    <dd>a graphql schema definition. Note: syntax highlighting is supported if ace extension for graphql is installed.</dd>
+  </dl>
+  <h3>Extras - GraphQL Visual Editor</h3>
+ <p>GraphQL Visual Editor build is bundled with the node. It is a visual editor for GraphQL schemas. Read more about it at <a href="https://github.com/graphql-editor/graphql-editor">https://github.com/graphql-editor/graphql-editor</a></p>
+  <p>In order to use it you need to add a property in user settings file and restart Node-RED . 
+  example: <div style=\"padding-left:5px;\">graphqlSchema: {<div style=\"padding-left:15px\">editor: true<br>}</div></div>
+ </p>
+ <p>Note: when GraphQL Visual editor is enabled, an editor icon will show up above the schema to launch the current schema editor in a new window. </p>
+<h3>Details</h3>
+    <p>a GraphQL schema is the core of GraphQL specifications and by defining it here you can use it with any "graphql-in" node. The schema will be validated on deploy and errors will be printed to the console. 
+      To ensure you have a valid schema, you can use the handy Visual Schema editor to create a new schema from scratch or
+      edit the currently selected schema. Once done, copy the schema definition from the Visual Editor and paste it in the form.
+    </p>
+</script>

@@ -1,0 +1,132 @@
+<!-- English: Help text -->
+<!--
+  Copyright NileIO.io (Neil Lyon-S) [the STRANGER] and other contributors, https://github.com/nileio/node-red-contrib-graphql-nodes
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- English: Help text is provided for the node.                   -->
+
+<script type="text/x-red" data-help-name="graphql-in">
+
+    <p>Creates a GraphQL server endpoint at the defined path supporting both query and mutation operations. The endpoint serves both <code>GET</code> and <code>POST</code> requests by default.</p>
+    <p>
+      Outputs an object <code>msg.graphql</code> with information holding the GraphQL query and the expected return type. The fulfilment of request is delegated to the flow and a response is returned using the "graphql out" node.
+    </p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+      <dt>Path<span class="property-type">string</span></dt>
+      <dd> a path to use for serving GraphQL queries. Make sure you choose a unique path that is not currently defined on any other http In nodes.</dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>Method<span class="property-type">select</span></dt>
+      <dd> one of the supported methods. GET and POST, GET only , or POST only. Note: GraphiQL can only be used if GET/POST is selected. A small browse icon will appear to open Graphi in a new browser window </dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>GraphiQL <span class="property-type">boolean</span></dt>
+      <dd> enables or disables the built-in GraphQL query explorer (Graphi). Graphi interface will be available at the chosen path. The default is enabled. </dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>Schema <span class="property-type">object</span></dt>
+      <dd> GraphQL schema to use for this server. choose an existing schema or configure a new GraphQL schema definition.</dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>Resolvers<span class="property-type">select</span></dt>
+      <dd>
+       Choose one of the supported field resolver modes.
+
+        <ul>
+          <li><code>root operations only</code> - this option indicates that the flow will return a complete response to all root operations.
+            This indicates that no additional field-level resolvers are needed in order to return a complete response to any request.
+            This is a simple mode and works only if query nesting is either not expected from client requests or somehow the flow resolves nested queries without needing additional field resolvers.
+            It is an error if any field requested in the client request returns an <code>undefined</code> response.</li>
+          <li><code>root + all non scalar fields</code> - this option indicates that the flow provides additional field-level resolvers for all the non-scalar fields of the schema (that is: Enum, Array, Interface, Union and Object types).
+            Scalar types in GraphQL specifications are Boolean, Float, ID, Int and String.
+            In this mode, the complete response <code>payload</code> will combine returns from all field-level resolvers in addition to the root operation resolvers
+            before sending the result to the client. The parent query result is available in the property <code>graphql.parent</code>.
+            This is a typical mode for a full GraphQL server implementation in order to allow full flexiblity and support of any levels of request query nesting.
+            To determine which field is requested to resolve the flow should use <code>graphql.fieldPath</code>. </li>
+          <li><code>root + selected fields</code> - this option enables the user to individually select any additional field-level resolvers provided in the flow.
+            This option allows you to select any type of field. Note: this option is available only after the initial node deploy.</li>
+        </ul>
+
+      </dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>Timeout<span class="property-type">number</span></dt>
+      <dd> timeout in milliseconds for the flow to fulfill requests and return a response to client. In case of a timeout, a "Request Timeout" error message will be returned to client.</dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>Use <a href="https://github.com/graphql/dataloader">Dataloader</a> to batch requests.<span class="property-type">boolean</span></dt>
+      <dd>  DataLoader is a library which batches requests specifically for JavaScript. It solves the N+1 issue inherent to any GraphQL server implementation. The library reduces the overall number of datastore queries required when fulfilling requests. Instead of the server expecting each field resolver to return a value, the library allows batching of similar requests and requesting the result for the whole batch in one call. This is relevant to serving nested queries and is used to batch <code>parent</code> return data and therefore with this option <code>parent</code> data will always be an <code>Array</code>. When using this option ensure that returned results is an <code>Array</code> with the same length as the <code>parent</code> array length. If this option is not used, the node immediately sends a message to resolve every object returned by the parent query which is inefficient and should always be avoided.
+    </dl>
+   <h3>Outputs</h3>
+                   <dl class="message-properties">
+                       <dt>operationName <span class="property-type">string</span></dt>
+                       <dd> the name given to the operation in the request.</dd>
+                       <dt>operationType <span class="property-type">string</span></dt>
+                       <dd> query, mutation or subscription.</dd>
+                       <dt>fieldName <span class="property-type">string</span></dt>
+                       <dd> the name of the field requested in the query. Use this field to determine the resolver flow to use.</dd>
+                       <dt>parentType <span class="property-type">string</span></dt>
+                       <dd> the type name of the parent type.</dd>
+                       <dt>fieldPath <span class="property-type">string</span></dt>
+                       <dd> shortcut to "parentType.fieldName" . Use this property to determine the resolver to use for field-level resolvers.</dd>
+                       <dt>args <span class="property-type">object</span></dt>
+                       <dd> any guments provided to the query will be parsed and provided here.</dd>
+                       <dt>parent <span class="property-type">object</span></dt>
+                       <dd> this object will hold the return from the parent query.Use this to return results for nested queries or non-scalar fields. This will always be an <code>Array</code> if using <b>Dataloader</b></dd>
+                       <dt>vars <span class="property-type">object</span></dt>
+                       <dd> this object will hold any variables provided in the client request.</dd>
+                       <dt>return <span class="property-type">object</span></dt>
+                       <dd> this object will hold the type information of the expected return for this field.</dd>
+                   </dl>
+                   <p> <code>return</code> object includes the following properties: </p>
+                      <dl class="message-properties">
+                          <dt>type <span class="property-type">string</span></dt>
+                          <dd> the output type name.</dd>
+                          <dt>isAbstract <span class="property-type">boolean</span></dt>
+                          <dd> whether the output type is an abstract type such as Union or Interface.</dd>
+                          <dt>typeText <span class="property-type">string</span></dt>
+                          <dd> the graphQL syntax type as text.</dd>
+                          <dt>dataType <span class="property-type">string</span></dt>
+                          <dd> the javascript data type.</dd>
+                          <dt>fields <span class="property-type">array</span></dt>
+                          <dd> an array of all defined fields on the type and their properties.</dd>
+                       </dl>
+
+  <h3>Extras - GraphQL Voyager</h3>
+   <p>GraphQL Voyager build is bundled with the node. It is a nice graphical read-only explorer of GraphQL schemas. Read more about it at <a href="https://github.com/APIs-guru/graphql-voyager">https://github.com/APIs-guru/graphql-voyager</a></p>
+    <p>In order to use it you need to add a property in user settings file and restart Node-RED .
+    example: <div style=\"padding-left:5px;\">graphqlIn: {<div style=\"padding-left:15px\">voyager: true<br>}</div></div>
+   </p>
+   <p>Note: when GraphQL Voyager is enabled, a button will show up next to the switch to launch the Voyager in a new window.</p>
+  <h3>Details</h3>
+        <p>The default resolver mode option is <code>root operations only</code>. For any given GraphQL schema, there must be at least a single root operation.
+        Root operations refer to any field belonging to the 3 GraphQL operation types (query, mutation or subscription), that is those fields of any type showing under the special <code>schema</code> fragment in the schema.</p>
+        <p>In this mode, it is the responsbility of the flow to return a complete response for every type of request regardless of how deeply nested the requested fields are!
+          This is not often what you would need to do in a production system to take full advantage of GraphQL’s graph traversal features.
+       Read More about GraghQL and schema definition at the official website <a href="https://graphql.org/">https://graphql.org/</a>.</p>
+      <p><code>msg.graphql</code> contains a parsed object of the client request query in addition to the expected return type from the flow. It contains all details required to service the request.</p>
+        <p>The end point is mounted on Node-Red httpNode and inherits all defined middlewares.
+        This means that authorisation for this graphql server can be configured using any supported httpNode strategy. In addition, a simple GraphQL extension is added which returns the time it took in milliseconds for request to be fulfilled with every return to client.
+        You can also enable SSL or any other availble option for httpNode. Check Node-RED docs for futher details and examples of auth strategies.</p>
+      <p><strong>Important: </strong> this node must be paired with a "graphql-out" node to send a response back to the client.</p>
+
+  <h3>References</h3>
+      <ul>
+          <li><a href="https://graphql.org">GraphQL Documentation</a> - full description of <code>GraphQL</code> specifications.</li>
+
+      </ul>
+</script>
