@@ -2,7 +2,7 @@
   "graphql-schema": {
     "label": {
       "schema": "Schema",
-      "pagination":"Pagination specs support",
+      "pagination":"Pagination Specs support (Experimental)",
       "cursorField": "Cursor Field",
       "editor": "GraphQL Editor",
       "editorendpoint": "Endpoint"
