@@ -90,7 +90,7 @@ module.exports = function (RED) {
       // #region ** GraphQL server route implementation **
       server = RED.server,
       proto = RED.settings.requireHttps ? "https" : "http";
-
+      
     node.serverURL = `${proto}://${server.address().address}:${
       server.address().port
     }${node.path}`;
@@ -135,6 +135,7 @@ module.exports = function (RED) {
           corsHandler = cors(RED.settings.httpNodeCors);
           RED.httpNode.options("*", corsHandler);
         }
+        
         const errorHandler = function (err, _req, res, _next) {
             node.warn(err);
             res.sendStatus(500);

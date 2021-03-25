@@ -19,3 +19,6 @@ of GraphQL specifications:
  - graphql-schema: Configuration to define a GraphQL schema.
  - graphql-subscriptionserver : a graphql subscription server implementation using PubSub
 
+## Known Issues
+
+On restart of Node-RED , a console error message appears "cannot read property address of null". I am unable to re-produce this issue so investigation continues. I currently use RED.server.address().address but this should always return a value. Investigation continues, please add a comment for the issue in github if you have any thoughts to resolve this issue. Currently a Re-deploy of the flow is required every time you restart Node-RED in order to run GraphQL in node.

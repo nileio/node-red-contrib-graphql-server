@@ -17,4 +17,39 @@
 
 <!-- English: Help text is provided for the node.                   -->
 
-<script type="text/x-red" data-help-name="graphql-subscriptionserver"></script>
+<script type="text/x-red" data-help-name="graphql-subscriptionserver">
+  <p>GraphQL Subscription server implementation using <a href="https://github.com/apollographql/graphql-subscriptions" target="_blank">graphql-subscriptions</a>&nbsp;library and MQTT PubSub implementation.</p>
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+      <dt>Path<span class="property-type">string | buffer</span></dt>
+      <dd>the path endpoint to use.</dd>
+      <dt>PubSub<span class="property-type">string</span></dt>
+      <dd>the PubSub implementation to use. MQTT is the only available option. Other future implementations may include Redis, RabbitMQ, etc.</dd>
+      <dt>Broker<span class="property-type">string</span></dt>
+      <dd>MQTT Broker to use. It uses Node-RED MQTT Broker configuration. You can use any MQTT Broker. Check out 
+          <a href="https://flows.nodered.org/node/node-red-contrib-aedes">Aedes Broker</a> if you want to run a local MQTT Broker in Node-RED.
+      </dd>
+      <dt>Schema</dt>
+      <dd>GraphQL Schema to use. Note that this node requires a GraphQL schema and it runs indepenentaly from graphql in or graphql out nodes.</dd>
+  </dl>
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+      <li>Standard output
+          <dl class="message-properties">
+              <dt>payload <span class="property-type">string</span></dt>
+              <dd>client subscription</dd>
+          </dl>
+      </li>
+  </ol>
+  <h3>Details</h3>
+  <p>The GraphQL Subscription server implementation internally uses WebSocket as the network transport layer and so the client application must be able to establishes a connection to the GraphQL Subscription server and listens for published data. A client application would first subscribe to one of the supported GraphQL subscriptions as defined in the GraphQL Schema and typically uses AsyncIterator to poll for changes. An example client application is the GraphQL Playground which is bundled with <b>GraphQL In</b>node and can be used to subscribe and listen to published data. </p>
+  <p>
+In order to publish data to clients an MQTT client is required. Node-RED MQTT client can be used for this purpose. The MQTT client would publish data for a particular subscription defined in the schema (that is a topic), and the Subscription Server will be sending the data to any subscribed clients to recieve the data after applying any required filters.</p>
+  <h3>References</h3>
+  <ul>
+      <li>
+          <a href="https://github.com/nileio/node-red-contrib-graphql-server">GitHub</a> - the node Github repository
+      </li>
+  </ul>
+
+</script>
