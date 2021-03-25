@@ -44,7 +44,7 @@
   <h3>Details</h3>
   <p>The GraphQL Subscription server implementation internally uses WebSocket as the network transport layer and so the client application must be able to establishes a connection to the GraphQL Subscription server and listens for published data. A client application would first subscribe to one of the supported GraphQL subscriptions as defined in the GraphQL Schema and typically uses AsyncIterator to poll for changes. An example client application is the GraphQL Playground which is bundled with <b>GraphQL In</b>node and can be used to subscribe and listen to published data. </p>
   <p>
-In order to publish data to clients an MQTT client is required. Node-RED MQTT client can be used for this purpose. The MQTT client would publish data for a particular subscription defined in the schema (that is a topic), and the Subscription Server will be sending the data to any subscribed clients to recieve the data after applying any required filters.</p>
+In order to publish data to clients an MQTT publisher is required. Node-RED mqtt out node can be used for this purpose. The MQTT publisher such as mqtt out node would publish data for a particular subscription (that is a topic) matching a subscription query defined in the GraphQL schema, and the Subscription Server will be sending the data to any subscribed clients to recieve the data after applying any required filters.</p>
   <h3>References</h3>
   <ul>
       <li>
