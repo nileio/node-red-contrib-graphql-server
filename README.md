@@ -7,9 +7,9 @@ A set of nodes for <a href="http://nodered.org" target="_new">Node-RED</a> to ru
 To install the stable version use the Menu - Manage palette option and search for node-red-contrib-graphql-server ,
 or Run the following command in your Node-RED user directory - typically `~/.node-red`
 
-Note: Requries NodeJs version 11.5 or higher.
+Note: Requries NodeJs version 11.5 or higher
 
-    npm install node-red-contrib-graphql-server
+    npm install node-red-contrib-graphql-server --engine-strict
 
 ## Usage
 
