@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-graphql-server",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A set of nodes to run a local GraphQL Server in Node-RED.",
   "scripts": {
     "maps": "genmaps --sourceRoot /src/ -o html,js",
@@ -26,6 +26,9 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0"
   },
+  "engines": {
+    "node": ">=11.15.0"
+ },
   "repository": {
     "type": "git",
     "url": "https://github.com/nileio/node-red-contrib-graphql-server/"
