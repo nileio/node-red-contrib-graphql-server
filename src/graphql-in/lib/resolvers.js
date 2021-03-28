@@ -343,7 +343,7 @@ exports.buildfieldResolvers = (node, RED) => {
   //3. field-level resolvers
   let requireResolversForNonScalar = false;
   if (node.resolverstype === "nonscalar") {
-    requireResolversForNonScalar = true;
+   // requireResolversForNonScalar = true;
     //always use the latest deployed schema tree only to avoid any inconsistency
     node.schemaConfig.getclientResolversTree().forEach((parent) => {
       const type = parent.id;
