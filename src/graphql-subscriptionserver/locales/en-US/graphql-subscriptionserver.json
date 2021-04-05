@@ -13,7 +13,7 @@
     "errors":{
       "missing-config":"missing configuration.",
       "duplicate-path": "path __path__ already exists.",
-      "no-subscription-operation": "GraphQL schema name \"__schema__\" does not include valid Subscription operations."
+      "no-subscription-operation": "GraphQL schema \"__schema__\" does not include any valid Subscription operations."
     }
   }
 }

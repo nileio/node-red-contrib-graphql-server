@@ -35,7 +35,7 @@ module.exports = function (RED) {
   const url = require("url");
 
   let subscriptionServers = {};
-  let connectedClients = 0;
+  let connections = 0;
   let serverUpgradeAdded = false;
 
   function GraphQLSubscriptionServer(n) {
@@ -71,6 +71,7 @@ module.exports = function (RED) {
               ws,
               request
             );
+
           }
         );
       } else {
@@ -118,20 +119,7 @@ module.exports = function (RED) {
       if (!subscriptionServers.hasOwnProperty(path)) {
         this.schema = this.schemaConfig.schema;
 
-        node.mqttbrokerConn.register(this);
-        node.mqttbrokerConn.client.on("connect", function () {
-          const client = node.mqttbrokerConn.client;
-          pubsub = new MQTTPubSub({
-            client,
-          });
-          node.status({
-            fill: "green",
-            shape: "dot",
-            text: RED._("graphql-subscriptionserver.status.serving", {
-              clients: 0
-            })
-          });
-        })
+
         //build subscription server resolvers
         const rootOperations = node.schemaConfig.getrootOperations();
         rootOperations.forEach((operation) => {
@@ -153,9 +141,9 @@ module.exports = function (RED) {
             Object.assign(node.resolvers, { [type]: subresolvers });
           }
         });
-
+        //ensure the schema is valid containing subscription operations otherwise return
         if (!(node.resolvers.hasOwnProperty("Subscription"))) {
-          this.warn(
+          this.error(
             RED._(
               "graphql-subscriptionserver.errors.no-subscription-operation",
               {
@@ -164,11 +152,25 @@ module.exports = function (RED) {
             )
           );
           this.status({
-            fill: "yellow",
+            fill: "red",
             shape: "dot",
-            text: `schema ${node.schemaConfig.name} does not include valid Subscription operations.`,
+            text: `No Subscription operations found`,
           });
+          return
         }
+        // now register our node with mqtt broker and listen for connections
+        node.mqttbrokerConn.register(this);
+        node.mqttbrokerConn.client.on("connect", function () {
+          const client = node.mqttbrokerConn.client;
+          pubsub = new MQTTPubSub({
+            client,
+          });
+          node.status({
+            fill: "blue",
+            shape: "dot",
+            text: `0 connections`
+          });
+        })
         //Object.assign(node.resolvers,gqlnode.fieldresolvers.fieldResolvers)
         const logger = {
           log: (e) => {
@@ -196,44 +198,56 @@ module.exports = function (RED) {
         node.wsserver = new ws.Server(serverOptions);
         node.wsserver.setMaxListeners(0);
 
-        //logging
-        // const onOperation = function (message, params, webSocket) {
-        //   console.log('subscription' + message.payload, params);
-        //  // return Promise.resolve(Object.assign({}, params, { context: message.payload.context }))
-        // }
-        //logging
+        //optional method to create custom params that will be used when resolving this operation. 
+        //It can also be used to dynamically resolve the schema that will be used for the particular operation.
+        const onOperation = function (message, params, webSocket) {
+
+          node.send({ topic: "subscribe", payload: { event: "subscribe", data: message.payload } })
+          return Promise.resolve(Object.assign({}, params, { context: params.context }))
+        }
+        //optional method that called when a GraphQL operation is done 
+        //(for query and mutation it's immediately, and for subscriptions when unsubscribing)
+        const onOperationComplete = function (webSocket, opId) {
+
+          node.send({ topic: "unsubscribe", payload: { event: "unsubscribe", data: { id: opId } } })
+
+        }
+        // optional method that called when a client connects to the socket,
         const onConnect = function (_connectionParams, _webSocket, _context) {
-          connectedClients++;
+          connections++;
           node.status({
-            fill: connectedClients === 0 ? "green" : "blue",
+            fill: connections === 0 ? "blue" : "green",
             shape: "dot",
-            text: RED._("graphql-subscriptionserver.status.serving", {
-              clients: connectedClients,
-            }),
+            text: `${connections} connections`,
           });
+          node.send({ topic: "clientConnected", payload: { event: "clientConnected", data: { totalConnections: connections } } })
         };
-        //loggging
+        //optional method that called when a client disconnects
         const onDisconnect = function (_webSocket, _context) {
-          connectedClients--;
-          node.status({
-            fill: connectedClients === 0 ? "green" : "blue",
-            shape: "dot",
-            text: RED._("graphql-subscriptionserver.status.serving", {
-              clients: connectedClients,
-            }),
-          });
+          if (connections > 0) {
+            connections--;
+            node.status({
+              fill: connections === 0 ? "blue" : "green",
+              shape: "dot",
+              text: `${connections} connections`,
+            });
+          }
+          node.send({ topic: "clientDisconnected", payload: { event: "clientDisconnected", data: { totalConnections: connections } } })
         };
-        SubscriptionServer.create(
+        //Create the subscription server
+        node.subscriptionServer = SubscriptionServer.create(
           {
             schema: node.execSchema,
             execute,
             subscribe,
+            onOperation,
+            onOperationComplete,
             onConnect,
-            onDisconnect,
+            onDisconnect
           },
           node.wsserver
         );
-
+        console.log(`🦉  Graphql Subscription server listening on ${RED.settings.requireHttps ? 'wss' : 'ws'}://${RED.settings.uiHost}:${RED.settings.uiPort}${this.subscriptionspath}`)
       } else {
         this.error(
           RED._("graphql-subscriptionserver.errors.duplicate-path", {
@@ -251,8 +265,22 @@ module.exports = function (RED) {
     }
     node.on("close", function (removed, done) {
       delete subscriptionServers[node.fullPath];
-      node.mqttbrokerConn.deregister(node, done);
-      node.wsserver.close();
+
+      //attempt to gracefully terminate servers and clients
+      //graceful termination in case of flow re-deploy depends on the CLIENT closing connections otherwise a console message may appear
+      //with a connection reset message or so. For example, the client node https://github.com/adamgoose/node-red-contrib-gql-sub closes connection
+      //properlly and therefore no error messages are generated.
+      node.subscriptionServer.close()
+
+      if (node.mqttbrokerConn.client && node.mqttbrokerConn.client.connected)
+        node.mqttbrokerConn.client.end();
+
+      pubsub.mqttConnection.end(true)
+      node.mqttbrokerConn.deregister(node, function () {
+        return done()
+
+      })
+
     });
   }
   RED.nodes.registerType(
