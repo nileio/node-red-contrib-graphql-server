@@ -31,7 +31,7 @@ of GraphQL specifications:
 
 - includes a [GraphQL Schema Visual editor](https://github.com/graphql-editor/graphql-editor), and [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager) builds ! (I may remove those builds from future nodes but those are great for learning GraphQL if you are new)
 
-- includes a GraphQL Playground (previously I used Graphi) - the Playground enables you to test your query, mutation operations and interact with the server. The Playground also supports subscriptions!
+- includes a [GraphQL Playground](https://github.com/graphql/graphql-playground) (previously I used GraphiQL) - the Playground enables you to test your query, mutation operations and interact with the server. The Playground also supports subscriptions!
 
 - Experimental feature to automatically resolve Pagination in your schema. This is supporting the unofficial [GraphQL Cursor Pagination Specs](https://relay.dev/graphql/connections.htm)
 
