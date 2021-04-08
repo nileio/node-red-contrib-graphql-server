@@ -1,0 +1,136 @@
+type Query {
+  person(id: ID!): Person
+  people(limit: Int): [Person!]!
+  film(id: ID!): Film
+  films(limit: Int): [Film!]!
+  starship(id: ID!): Starship
+  starships(limit: Int): [Starship!]!
+  vehicle(id: ID!): Vehicle
+  vehicles(limit: Int): [Vehicle!]!
+  specie(id: ID): Specie
+  species(limit: Int): [Specie!]!
+  planet(id: ID!): Planet
+  planets(limit: Int): [Planet!]!
+}
+
+type Person {
+  id: ID!
+  birth_year: String!
+  eye_color: String!
+  films: [Film!]
+  gender: String!
+  hair_color: String!
+  height: Float!
+  homeworld: Planet
+  mass: String!
+  name: String!
+  skin_color: String!
+  created: DateTime!
+  edited: DateTime!
+  specie: Specie
+  starships: [Starship!]
+  vehicles: [Vehicle!]
+}
+
+type Film {
+  id: ID!
+  characters: [Person!]
+  created: DateTime!
+  director: String!
+  edited: DateTime!
+  episode_id: ID!
+  opening_crawl: String!
+  planets: [Planet!]
+  producer: String!
+  release_date: DateTime!
+  species: [Specie!]
+  starships: [Starship!]
+  title: String!
+  vehicles: [Vehicle!]
+}
+
+scalar DateTime
+
+type Planet {
+  id: ID!
+  climate: String!
+  created: DateTime!
+  diameter: String!
+  edited: DateTime!
+  films: [Film!]
+  gravity: String!
+  name: String!
+  orbital_period: String!
+  population: String!
+  residents: [Person!]
+  rotation_period: String!
+  surface_water: String!
+  terrain: String!
+  species: [Specie!]
+}
+
+type Specie {
+  id: ID!
+  average_height: String!
+  average_lifespan: String!
+  classification: String!
+  created: DateTime!
+  designation: String!
+  edited: DateTime!
+  eye_colors: String!
+  hair_colors: String!
+  homeworld: Planet
+  language: String!
+  name: String!
+  people: [Person!]
+  films: [Film!]
+  skin_colors: String!
+}
+
+type Starship {
+  id: ID!
+  MGLT: String!
+  cargo_capacity: String!
+  consumables: String!
+  cost_in_credits: String!
+  created: DateTime!
+  crew: String!
+  edited: DateTime!
+  hyperdrive_rating: String
+  length: String!
+  manufacturer: String!
+  max_atmosphering_speed: String!
+  model: String!
+  name: String!
+  passengers: String!
+  films: [Film!]
+  pilots: [Person!]
+  starship_class: String!
+}
+
+type Vehicle {
+  id: ID!
+  cargo_capacity: Int!
+  consumables: String!
+  cost_in_credits: String!
+  created: DateTime!
+  crew: Int!
+  edited: DateTime!
+  length: String!
+  manufacturer: String!
+  max_atmosphering_speed: String!
+  model: String!
+  name: String!
+  passengers: Int!
+  pilots: [Person!]
+  films: [Film!]
+  vehicle_class: String!
+}
+
+type Subscription {
+  newFilms: Film!
+}
+schema {
+  query: Query
+  subscription: Subscription
+}

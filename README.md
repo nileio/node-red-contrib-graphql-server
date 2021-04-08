@@ -1,6 +1,7 @@
 # node-red-contrib-graphql-server
 
 A set of nodes for <a href="http://nodered.org" target="_new">Node-RED</a> to run a local GraphQL Server.
+The server uses the javascript reference implementation of the GraphQL specification.
 
 ## Install
 

@@ -42,6 +42,8 @@ exports.buildfieldResolvers = (node, RED) => {
             ? {
               payload: parent,
               fieldPath: info._parent.fieldPath,
+              fieldName: info._parent.fieldName,
+              parentType: info._parent.parentType,
               args: info._parent.args,
             }
             : undefined,
@@ -58,6 +60,8 @@ exports.buildfieldResolvers = (node, RED) => {
             isConnection: false,
             isEdge: false,
             isPageInfo: false,
+            isArray: typeReturn.dataType === "Array",
+            isObject: typeReturn.dataType === "Object",
             typeText: typeReturn.typeName,
             dataType: typeReturn.typeType,
             fields: node.schemaConfig.formatreturnTypeFields(info.returnType),
@@ -72,7 +76,7 @@ exports.buildfieldResolvers = (node, RED) => {
           },
           _resolver: {
             _fieldName: () => info.fieldName,
-            _resolve: (result) => {       
+            _resolve: (result) => {
               resolve(result);
             },
             _reject: (reason) => {
@@ -160,9 +164,9 @@ exports.buildfieldResolvers = (node, RED) => {
         .reduce((acc, c, i) => {
           return (acc[c.request] && acc[c.request].payload.push(c.payload) ||
             (acc[c.request] = {
-              request:c.request,args: c.extra.args, context: c.extra.context, info: c.extra.info,
+              request: c.request, args: c.extra.args, context: c.extra.context, info: c.extra.info,
               thisnode: c.extra.thisnode, payload: new Array(c.payload), keys: []
-            } )) && acc[c.request].keys.push(i) && acc
+            })) && acc[c.request].keys.push(i) && acc
         }, {}))
         .map(v => {
           delete v[1].context.loaderkeys[v[1].request];
@@ -230,6 +234,7 @@ exports.buildfieldResolvers = (node, RED) => {
       info._parent = {
         fieldPath: getParentfieldPath(info.path),
       };
+      [info._parent.parentType, info._parent.fieldName] = info._parent.fieldPath.split(".");
       info._parent.args = context.selections.args[info._parent.fieldPath];
       context.selections.args[fieldPath] = args;
     }
@@ -343,7 +348,7 @@ exports.buildfieldResolvers = (node, RED) => {
   //3. field-level resolvers
   let requireResolversForNonScalar = false;
   if (node.resolverstype === "nonscalar") {
-   // requireResolversForNonScalar = true;
+    // requireResolversForNonScalar = true;
     //always use the latest deployed schema tree only to avoid any inconsistency
     node.schemaConfig.getclientResolversTree().forEach((parent) => {
       const type = parent.id;
