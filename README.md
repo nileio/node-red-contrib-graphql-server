@@ -38,7 +38,7 @@ of GraphQL specifications:
 
 - Subscription Server implementation based on [graphql-subscriptions](https://github.com/apollographql/graphql-subscriptions) using MQTT for PubSub which means you can use the out of box MQTT nodes with it.
 
-- For testing and playing around, In the examples folder of the node, I included a sqlite database called chinook.sqlite [chinook-database](https://github.com/lerocha/chinook-database) and created a GraphQL schema for it. Import the sample flow if you want to try it. Note, this is relatively a complex sample which includes Pagination. If you are new to GraphQL , create your own simple GraphQL schema without pagination and familiarise yourself first.
+- The data in `msg.graphql` includes everything you may need to resolve the query such as operation details, result of previous query, arguments passed to the query, reference to the root of the query,etc.
 
 ## How to use it
 
