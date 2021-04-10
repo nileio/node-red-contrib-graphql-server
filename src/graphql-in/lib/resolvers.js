@@ -33,27 +33,18 @@ exports.buildfieldResolvers = (node, RED) => {
         graphql: {
           operationName: info.operation.name ? info.operation.name.value : null,
           operationType: info.operation.operation,
+          fieldPath: `${info.parentType.name}.${info.fieldName}`,
           fieldName: info.fieldName,
           parentType: info.parentType.name,
-          fieldPath: `${info.parentType.name}.${info.fieldName}`,
+          isRoot: parent ? false : true,
           args: args,
           vars: info.variableValues,
-          parent: parent
-            ? {
-              payload: parent,
-              fieldPath: info._parent.fieldPath,
-              fieldName: info._parent.fieldName,
-              parentType: info._parent.parentType,
-              args: info._parent.args,
+          parent: parent ?
+            {
+              payload: parent
             }
             : undefined,
-          root: context.root
-            ? {
-              fieldPath: context.root.fieldPath,
-              args: context.root.args,
-              vars: context.root.vars,
-            }
-            : undefined,
+          root: context.root,
           return: {
             type: getdeepName(info.returnType),
             typeText: typeReturn.typeName,
@@ -65,31 +56,12 @@ exports.buildfieldResolvers = (node, RED) => {
             isArray: typeReturn.typeName.includes('['),
             isObject: typeReturn.typeName.includes('[') === false,
             isEnum: typeReturn.typeType === "Enum",
-            isNonNull: typeReturn.typeName === "NonNull",
+            isNonNull: typeReturn.typeType === "NonNull",
             fields: node.schemaConfig.formatreturnTypeFields(info.returnType),
-          },
-          config: {
-            flowResolvers: node.resolverstype,
-            useDataLoader: node.usedataloader,
-            pagination:
-              node.schemaConfig.pagination &&
-              node.schemaConfig.cursorField.length > 0,
-            cursorField: node.schemaConfig.cursorField || undefined,
-          },
-          _resolver: {
-            _fieldName: () => info.fieldName,
-            _resolve: (result) => {
-              resolve(result);
-            },
-            _reject: (reason) => {
-              reject(reason);
-            },
-            _resolvepage: (result) => {
-              if (context.ppromise) context.ppromise._resolve(result);
-            },
-          },
+          }
         },
       };
+
       msg.graphql.return.isAbstract = node.schemaConfig.isAbstract(
         msg.graphql.return.type
       );
@@ -100,18 +72,6 @@ exports.buildfieldResolvers = (node, RED) => {
       msg.graphql.return.isPageInfo =
         msg.graphql.return.typeText.indexOf("PageInfo") !== -1; ///this is a reserved keyword according to pagination specs
 
-      // Object.defineProperty(msg.graphql, "_resolver", {
-      //   enumerable: false,
-      //   value: {
-      //     _fieldName: () => info.fieldName,
-      //     _resolve: function (result) {
-      //       resolve(result);
-      //     },
-      //     _reject: function (reason) {
-      //       reject(reason);
-      //     }
-      //   }
-      // });
 
       //Expermental : this will immediately resolve any field of type Enum that got a value assuming that Enums are returned in output
       // as just string literals
@@ -124,9 +84,7 @@ exports.buildfieldResolvers = (node, RED) => {
         //TEST : i removed return from below
         resolve(parent[info.fieldName]);
 
-      // context.__graphql.msg = msg;
-
-      // Pagination support - decode after & before params
+      // Start Pagination support - decode after & before params
       // format of cursor is "cursorField==value" base64 encoded.
       if (
         msg.graphql.operationType === "query" &&
@@ -154,8 +112,46 @@ exports.buildfieldResolvers = (node, RED) => {
           );
         }
       }
+      //End pagination supports
 
-      //dispatch message for resolution
+      //Build a reference to root and parent in context. 
+      //UPDATE: April 2021 Every message will have a reference to root and parent query
+      if (msg.graphql.isRoot) //this is the root query
+      {
+        [context.parent, context.root] = Array(2).fill(JSON.parse(JSON.stringify(msg.graphql)));
+
+      } else {
+        Object.assign(msg.graphql.parent, { query: context.parent });
+        context.parent = msg.graphql
+      }
+
+      //Now attach the remaining data structure and functions requried for resolving the operation
+      Object.assign(msg.graphql, {
+        config: {
+          flowResolvers: node.resolverstype,
+          useDataLoader: node.usedataloader,
+          pagination:
+            node.schemaConfig.pagination &&
+            node.schemaConfig.cursorField.length > 0,
+          cursorField: node.schemaConfig.cursorField || undefined,
+        },
+        _resolver: {
+          _fieldName: () => info.fieldName,
+          _resolve: (result) => {
+            resolve(result);
+          },
+          _reject: (reason) => {
+            reject(reason);
+          },
+          _resolvepage: (result) => {
+            if (context.ppromise) context.ppromise._resolve(result);
+          },
+        }
+      })
+
+
+      //Finally delegate resolving the query to the flow
+      //dispatch the message
       node.send(msg);
     });
   }
@@ -183,7 +179,9 @@ exports.buildfieldResolvers = (node, RED) => {
         // using the keys property added for each promise which simply contains the position required in the final results array.
         // we need this only if we split the original promise into more than one
         if (results.length > 1) {
+          // @ts-ignore
           const positions = results.flatMap(c => c.keys); //contains the original positions
+          // @ts-ignore
           return results.flat(1).reduce((acc, c, i) => {
             acc[positions[i]] = c;
             return acc;
@@ -191,6 +189,7 @@ exports.buildfieldResolvers = (node, RED) => {
         }
         else
           //flat depth 1 is needed since we use Promise.all which returns results as an array.
+          // @ts-ignore
           return results.flat(1)
       })
     } catch (err) {
@@ -200,46 +199,29 @@ exports.buildfieldResolvers = (node, RED) => {
     }
   }
 
-  function getParentfieldPath(path) {
-    //TODO: Needs further tests with deep nested paths
-    if (path.prev && path.prev.typename)
-      return `${path.prev.typename}.${path.prev.key}`;
-    else {
-      let noprev = path.prev.typename === undefined;
-      let prev = path.prev.prev;
-      while (noprev) {
-        if (prev && prev.typename) return `${prev.typename}.${prev.key}`;
-        else if (prev && !prev.typename) prev = prev.prev;
-        else noprev = false;
+  // No need for this function anymore. the Parent object is now stored in context and passed over with every query
+  // TODO: optimise the context object - it now holds quite a bit of objects
+  /*   function getParentfieldPath(path) {
+      //TODO: Needs further tests with deep nested paths
+      if (path.prev && path.prev.typename)
+        return `${path.prev.typename}.${path.prev.key}`;
+      else {
+        let noprev = path.prev.typename === undefined;
+        let prev = path.prev.prev;
+        while (noprev) {
+          if (prev && prev.typename) return `${prev.typename}.${prev.key}`;
+          else if (prev && !prev.typename) prev = prev.prev;
+          else noprev = false;
+        }
+        return `${path.typename}.${path.key}`;
       }
-      return `${path.typename}.${path.key}`;
-    }
-  }
+    } */
 
   //this is the core of graphQL ! the resolver function
   function resolvefn(parent, args, context, info) {
     const promises = [],
       thisnode = context.node,
       fieldPath = `${info.parentType.name}.${info.fieldName}`;
-
-    if (!parent) {
-      context.root = {
-        fieldPath: fieldPath,
-        args: args,
-        vars: info.variableValues,
-      };
-      //used when checking for the existence of required fields for pagination object , that is "edges" field
-      context.selections = {
-        args: { [fieldPath]: args },
-      };
-    } else {
-      info._parent = {
-        fieldPath: getParentfieldPath(info.path),
-      };
-      [info._parent.parentType, info._parent.fieldName] = info._parent.fieldPath.split(".");
-      info._parent.args = context.selections.args[info._parent.fieldPath];
-      context.selections.args[fieldPath] = args;
-    }
 
     //With Pagination support -- add a special promise for pageInfo (resolved only when edges are resolved)
     //note pageInfo is a reserved keyword if using Pagination Specs support
@@ -302,7 +284,7 @@ exports.buildfieldResolvers = (node, RED) => {
               fieldPath: err_msg[1],
               timeout: thisnode.timeout / 1000,
             });
-            thisnode.error(new Error(msg));
+            thisnode.error(new Error(msg)); //this will return the error to node-red editor
             console.error(msg, err.stack);
 
             return new Error(

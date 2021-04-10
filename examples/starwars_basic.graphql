@@ -13,6 +13,8 @@ type Query {
   planets(limit: Int): [Planet!]!
 }
 
+#A Person is an individual person or
+#character within the Star Wars universe.
 type Person {
   id: ID!
   birth_year: String!
@@ -27,7 +29,7 @@ type Person {
   skin_color: String!
   created: DateTime!
   edited: DateTime!
-  specie: Specie
+  species: [Specie]
   starships: [Starship!]
   vehicles: [Vehicle!]
 }
