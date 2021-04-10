@@ -83,14 +83,18 @@
                        <dd> the type name of the parent type.</dd>
                        <dt>fieldPath <span class="property-type">string</span></dt>
                        <dd> shortcut to "parentType.fieldName" . Use this property to determine the resolver to use for field-level resolvers.</dd>
+                       <dt>isRoot <span class="property-type">boolean</span></dt>
+                       <dd> whether this query is a for a field existing on the root type as opposed to a field on a type.</dd>
                        <dt>args <span class="property-type">object</span></dt>
-                       <dd> any guments provided to the query will be parsed and provided here.</dd>
-                       <dt>parent <span class="property-type">object</span></dt>
-                       <dd> this object will hold the return from the parent query.Use this to return results for nested queries or non-scalar fields. This will always be an <code>Array</code> if using <b>Dataloader</b></dd>
+                       <dd> any arguments provided to the query will be parsed and provided here.</dd>
                        <dt>vars <span class="property-type">object</span></dt>
-                       <dd> this object will hold any variables provided in the client request.</dd>
+                       <dd> this object holds any variables provided in the client request.</dd>
+                       <dt>parent <span class="property-type">object</span></dt>
+                       <dd> this object holds the return from the parent query.Use this to return results for nested queries or non-scalar fields. <code>parent.payload</code> will always be an <code>Array</code> if using <b>Dataloader</b></dd>
+                       <dt>root <span class="property-type">object</span></dt>
+                       <dd> this object holds the reference to the root query</dd>
                        <dt>return <span class="property-type">object</span></dt>
-                       <dd> this object will hold the type information of the expected return for this field.</dd>
+                       <dd> this object holds the type information of the expected return for this field.</dd>
                    </dl>
                    <p> <code>return</code> object includes the following properties: </p>
                       <dl class="message-properties">
