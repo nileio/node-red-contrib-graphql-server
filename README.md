@@ -24,21 +24,22 @@ of GraphQL specifications:
 
 ## Summary of features
 
-- Uses Node-RED httpNode which means it inherits any middlewares, security,etc. you may have.
+- uses Node-RED httpNode which means it inherits any middlewares, security,etc. you may have.
 
-- Includes [Dataloader](https://github.com/graphql/dataloader) which enables efficient query implementation for nested operations inherent to any GraphQL server.
+- includes an option to use [Dataloader](https://github.com/graphql/dataloader) which enables efficient query implementation for nested operations inherent to any GraphQL server.
 
-- There are 3 modes to choose from to determine how you plan to resolve queries. Please read the docs to understand the differences.
+- there are 3 modes to choose from to determine how your flow resolves queries. Please read the docs to understand the differences.
 
-- includes a [GraphQL Schema Visual editor](https://github.com/graphql-editor/graphql-editor), and [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager) builds ! (I may remove those builds from future nodes but those are great for learning GraphQL if you are new)
+- includes a build of [GraphQL Schema Visual editor](https://github.com/graphql-editor/graphql-editor) in order to design a GraphQL schemas using a visual tool. The tool generates a schema which can be used in the node . (I may remove the tool in future versions!)
+- includes a link to visualise the schema using [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager). Note, it serves GraphQL Voyager from CDN which requires a live internet connection.
 
 - includes a [GraphQL Playground](https://github.com/graphql/graphql-playground) (previously I used GraphiQL) - the Playground enables you to test your query, mutation operations and interact with the server. The Playground also supports subscriptions!
 
-- Experimental feature to automatically resolve Pagination in your schema. This is supporting the unofficial [GraphQL Cursor Pagination Specs](https://relay.dev/graphql/connections.htm)
+- Experimental feature to automatically resolve Pagination in the schema. This is supporting the unofficial [GraphQL Cursor Pagination Specs](https://relay.dev/graphql/connections.htm)
 
-- Subscription Server implementation based on [graphql-subscriptions](https://github.com/apollographql/graphql-subscriptions) using MQTT for PubSub which means you can use the out of box MQTT nodes with it.
+- Subscription Server implementation based on [graphql-subscriptions](https://github.com/apollographql/graphql-subscriptions) using MQTT for PubSub which means you can use the out of box MQTT nodes with it. You can also use any GraphQL subscription client.
 
-- The data in `msg.graphql` includes everything you may need to resolve the query such as operation details, result of previous query, arguments passed to the query, reference to the root of the query,etc.
+- The data sent from the node in `msg.graphql` includes everything you may need to resolve the query such as operation details, result of previous query, arguments passed to the query, reference to the root of the query,etc.
 
 ## How to use it
 

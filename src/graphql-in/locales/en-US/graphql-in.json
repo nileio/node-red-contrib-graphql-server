@@ -12,7 +12,7 @@
       "rootonly": "root operations only",
       "nonscalar": "root + all nonscalar fields",
       "selected": "root + selected fields",
-      "usedataloader": "Use Dataloader (batch parent return data)",
+      "usedataloader": "Use Dataloader (batch parent payload)",
       "useSubscriptionServer": "Playground subscriptions server path",
       "subscriptionsPath": "Subscriptions path"
     },

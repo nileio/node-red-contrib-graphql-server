@@ -34,8 +34,8 @@
       <dd> one of the supported methods. GET and POST, GET only , or POST only. Note: GraphiQL can only be used if GET/POST is selected. A small browse icon will appear to open Graphi in a new browser window </dd>
     </dl>
     <dl class="message-properties">
-      <dt>GraphiQL <span class="property-type">boolean</span></dt>
-      <dd> enables or disables the built-in GraphQL query explorer (Graphi). Graphi interface will be available at the chosen path. The default is enabled. </dd>
+      <dt>Playground <span class="property-type">boolean</span></dt>
+      <dd> enables or disables the built-in GraphQL query explorer (Playground). Playground interface will be available at the chosen path. The default is enabled. </dd>
     </dl>
     <dl class="message-properties">
       <dt>Schema <span class="property-type">object</span></dt>
@@ -112,7 +112,7 @@
 
   <h3>Extras - GraphQL Voyager</h3>
    <p>GraphQL Voyager build is bundled with the node. It is a nice graphical read-only explorer of GraphQL schemas. Read more about it at <a href="https://github.com/APIs-guru/graphql-voyager">https://github.com/APIs-guru/graphql-voyager</a></p>
-    <p>In order to use it you need to add a property in user settings file and restart Node-RED .
+    <p>In order to use it you need to add a property in user settings file and restart Node-RED . Note it relies on CDN to serve resources so it requires a live internet connection.
     example: <div style=\"padding-left:5px;\">graphqlIn: {<div style=\"padding-left:15px\">voyager: true<br>}</div></div>
    </p>
    <p>Note: when GraphQL Voyager is enabled, a button will show up next to the switch to launch the Voyager in a new window.</p>
