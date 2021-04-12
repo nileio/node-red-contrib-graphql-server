@@ -19,27 +19,34 @@
 
 <script type="text/x-red" data-help-name="graphql-schema">
 
-  <p>Configuration to define a GraphQL schema.</p>
+    <p>Configuration to define a GraphQL schema.</p>
 
-  <h3>Inputs</h3>
+    <h3>Inputs</h3>
 
-  <dl class="message-properties">
-    <dt>Name<span class="property-type">string</span></dt>
-    <dd> provide a name to this schema definition.</dd>
-  </dl>
-  <dl class="message-properties">
-    <dt>Schema<span class="property-type">string</span></dt>
-    <dd>a graphql schema definition. Note: syntax highlighting is supported if ace extension for graphql is installed.</dd>
-  </dl>
-  <h3>Extras - GraphQL Visual Editor</h3>
- <p>GraphQL Visual Editor build is bundled with the node. It is a visual editor for GraphQL schemas. Read more about it at <a href="https://github.com/graphql-editor/graphql-editor">https://github.com/graphql-editor/graphql-editor</a></p>
-  <p>In order to use it you need to add a property in user settings file and restart Node-RED . 
-  example: <div style=\"padding-left:5px;\">graphqlSchema: {<div style=\"padding-left:15px\">editor: true<br>}</div></div>
- </p>
- <p>Note: when GraphQL Visual editor is enabled, an editor icon will show up above the schema to launch the current schema editor in a new window. </p>
-<h3>Details</h3>
-    <p>a GraphQL schema is the core of GraphQL specifications and by defining it here you can use it with any "graphql-in" node. The schema will be validated on deploy and errors will be printed to the console. 
-      To ensure you have a valid schema, you can use the handy Visual Schema editor to create a new schema from scratch or
-      edit the currently selected schema. Once done, copy the schema definition from the Visual Editor and paste it in the form.
-    </p>
+    <dl class="message-properties">
+      <dt>Name<span class="property-type">string</span></dt>
+      <dd> provide a name to this schema definition.</dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>Schema<span class="property-type">string</span></dt>
+      <dd>a graphql schema definition. Note: syntax highlighting is supported if ace extension for graphql is installed.</dd>
+    </dl>
+    <h3>Extras - GraphQL Visual Editor</h3>
+   <p>GraphQL Visual Editor build is bundled with the node. It is a visual editor for GraphQL schemas. Read more about it at <a href="https://github.com/graphql-editor/graphql-editor">https://github.com/graphql-editor/graphql-editor</a></p>
+    <p>In order to use it you need to add a property in user settings file and restart Node-RED .
+    example:
+    <pre>
+  {
+    graphqlSchema: {
+      editor: true
+    }
+  }
+      </pre>
+   </p>
+   <p>Note: when GraphQL Visual editor is enabled, an editor icon will show up above the schema to launch the current schema editor in a new window. </p>
+  <h3>Details</h3>
+      <p>a GraphQL schema is the core of GraphQL specifications and by defining it here you can use it with any "graphql-in" node. The schema will be validated on deploy and errors will be printed to the console.
+        To ensure you have a valid schema, you can use the handy Visual Schema editor to create a new schema from scratch or
+        edit the currently selected schema. Once done, copy the schema definition from the Visual Editor and paste it in the form.
+      </p>
 </script>

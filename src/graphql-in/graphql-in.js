@@ -85,164 +85,164 @@ module.exports = function (RED) {
           requireResolversForNonScalar: resolvers.requireResolversForNonScalar,
         },
       });
-      // #endregion
+    // #endregion
 
-      // #region ** GraphQL server route implementation **
-   // server = RED.server; 
-   
-      if (RED.settings.httpNodeRoot !== false) {
-        try {
-          const proto = RED.settings.requireHttps ? "https" : "http";
-          node.serverURL = `${proto}://${RED.settings.uiHost}:${RED.settings.uiPort}${node.path}`;
-          if (!node.path) {
-            this.error(RED._("graphql-in.errors.missing-path"));
-            this.status({
-              fill: "red",
-              shape: "dot",
-              text: "missing path",
-            });
-            return;
+    // #region ** GraphQL server route implementation **
+    // server = RED.server; 
+
+    if (RED.settings.httpNodeRoot !== false) {
+      try {
+        const proto = RED.settings.requireHttps ? "https" : "http";
+        node.serverURL = `${proto}://${RED.settings.uiHost}:${RED.settings.uiPort}${node.path}`;
+        if (!node.path) {
+          this.error(RED._("graphql-in.errors.missing-path"));
+          this.status({
+            fill: "red",
+            shape: "dot",
+            text: "missing path",
+          });
+          return;
+        }
+        if (paths.hasOwnProperty(node.path)) {
+          this.error(
+            RED._("graphql-in.errors.duplicate-path", { path: node.path })
+          );
+          this.status({
+            fill: "red",
+            shape: "dot",
+            text: `${node.path} already exists`,
+          });
+          return;
+        }
+        // default routing middleware
+        let httpMiddleware = function (req, res, next) {
+          next();
+        };
+
+        if (RED.settings.httpNodeMiddleware) {
+          if (typeof RED.settings.httpNodeMiddleware === "function") {
+            httpMiddleware = RED.settings.httpNodeMiddleware;
           }
-          if (paths.hasOwnProperty(node.path)) {
-            this.error(
-              RED._("graphql-in.errors.duplicate-path", { path: node.path })
+        }
+        let corsHandler = function (req, res, next) {
+          next();
+        };
+
+        if (RED.settings.httpNodeCors) {
+          corsHandler = cors(RED.settings.httpNodeCors);
+          RED.httpNode.options("*", corsHandler);
+        }
+
+        const errorHandler = function (err, _req, res, _next) {
+          node.warn(err);
+          res.sendStatus(500);
+        },
+          extensions = ({
+            document,
+            variables,
+            operationName,
+            result,
+            context,
+          }) => ({
+            runTime: Date.now() - context.startTime,
+          }),
+          getgraphQLOptions = (_req, usedataloader) => ({
+            schema: execSchema,
+            rootValue: null,
+            graphiql: false,
+            pretty: true,
+            context: {
+              startTime: Date.now(),
+              dataloader: usedataloader
+                ? new DataLoader(resolvers.batchFn, { cache: false })
+                : undefined,
+              loaderkeys: usedataloader ? {} : undefined,
+              node: node,
+            },
+            customFormatErrorFn: (error) => ({
+              message: error.message,
+              locations: error.locations,
+              stack: error.stack ? error.stack.split("\n") : [],
+              path: error.path,
+            }),
+            extensions,
+          }),
+          // eslint-disable-next-line no-inner-declarations
+          graphQLMiddleware = (usedataloader) => {
+            return graphqlHTTP((request) =>
+              getgraphQLOptions(request, usedataloader)
             );
-            this.status({
-              fill: "red",
-              shape: "dot",
-              text: `${node.path} already exists`,
-            });
-            return;
-          }
-          // default routing middleware
-          let httpMiddleware = function (req, res, next) {
-            next();
-          };
-  
-          if (RED.settings.httpNodeMiddleware) {
-            if (typeof RED.settings.httpNodeMiddleware === "function") {
-              httpMiddleware = RED.settings.httpNodeMiddleware;
-            }
-          }
-          let corsHandler = function (req, res, next) {
-            next();
-          };
-  
-          if (RED.settings.httpNodeCors) {
-            corsHandler = cors(RED.settings.httpNodeCors);
-            RED.httpNode.options("*", corsHandler);
-          }
-          
-          const errorHandler = function (err, _req, res, _next) {
-              node.warn(err);
-              res.sendStatus(500);
-            },
-            extensions = ({
-              document,
-              variables,
-              operationName,
-              result,
-              context,
-            }) => ({
-              runTime: Date.now() - context.startTime,
-            }),
-            getgraphQLOptions = (_req, usedataloader) => ({
-              schema: execSchema,
-              rootValue: null,
-              graphiql: false,
-              pretty: true,
-              context: {
-                startTime: Date.now(),
-                dataloader: usedataloader
-                  ? new DataLoader(resolvers.batchFn, { cache: false })
+          },
+          // we need to use .get & .post rather than .use in order to be able to identity and remove the routes on re-deploy
+          getMiddlewares = node.graphi
+            ? [
+              httpMiddleware,
+              corsHandler,
+              expressPlayground({
+                endpoint: node.path,
+                subscriptionEndpoint: node.useSubscriptionServer
+                  ? `${proto === "https" ? "wss" : "ws"}://${
+                  RED.settings.uiHost
+                  }:${RED.settings.uiPort}${node.subscriptionsPath}`
                   : undefined,
-                loaderkeys: usedataloader ? {} : undefined,
-                node: node,
-              },
-              customFormatErrorFn: (error) => ({
-                message: error.message,
-                locations: error.locations,
-                stack: error.stack ? error.stack.split("\n") : [],
-                path: error.path,
               }),
-              extensions,
-            }),
-            // eslint-disable-next-line no-inner-declarations
-            graphQLMiddleware = (usedataloader) => {
-              return graphqlHTTP((request) =>
-                getgraphQLOptions(request, usedataloader)
-              );
-            },
-            // we need to use .get & .post rather than .use in order to be able to identity and remove the routes on re-deploy
-            getMiddlewares = node.graphi
-              ? [
-                  httpMiddleware,
-                  corsHandler,
-                  expressPlayground({
-                    endpoint: node.path,
-                    subscriptionEndpoint: node.useSubscriptionServer
-                      ? `${proto === "https" ? "wss" : "ws"}://${
-                          RED.settings.uiHost
-                        }:${RED.settings.uiPort}${node.subscriptionsPath}`
-                      : undefined,
-                  }),
-                  graphQLMiddleware(node.usedataloader),
-                  errorHandler,
-                ]
-              : [
-                  httpMiddleware,
-                  corsHandler,
-                  graphQLMiddleware(node.usedataloader),
-                  errorHandler,
-                ];
-  
-          if (node.method === "getandpost" || node.method === "getonly") {
-            RED.httpNode.get(node.path, getMiddlewares);
-          }
-          // RED.httpNode.use(graphQLMiddleware);
-          if (node.method === "getandpost" || node.method === "postonly")
-            RED.httpNode.post(
-              node.path,
+              graphQLMiddleware(node.usedataloader),
+              errorHandler,
+            ]
+            : [
               httpMiddleware,
               corsHandler,
               graphQLMiddleware(node.usedataloader),
-              errorHandler
-            );
-  
-          const statusmsg =
-            node.method === "getandpost"
-              ? "GET/POST"
-              : node.method === "getonly"
+              errorHandler,
+            ];
+
+        if (node.method === "getandpost" || node.method === "getonly") {
+          RED.httpNode.get(node.path, getMiddlewares);
+        }
+        // RED.httpNode.use(graphQLMiddleware);
+        if (node.method === "getandpost" || node.method === "postonly")
+          RED.httpNode.post(
+            node.path,
+            httpMiddleware,
+            corsHandler,
+            graphQLMiddleware(node.usedataloader),
+            errorHandler
+          );
+
+        const statusmsg =
+          node.method === "getandpost"
+            ? "GET/POST"
+            : node.method === "getonly"
               ? "GET"
               : node.method === "postonly"
-              ? "POST"
-              : null;
-          node.status({
-            fill: "blue",
-            shape: "dot",
-            text: `${statusmsg}`,
-          });
-          paths[node.path] = node.path;
-          console.log(`🚀  Graphql server running at ${node.serverURL}`);
-        } catch (err) {
-          node.status({
-            fill: "red",
-            shape: "dot",
-            text: `${RED._("graphql-in.errors.internalerror", { error: err.message })}`,
-          });
-          // RED.notify here?
-          console.log(`${err}`);
-          this.error(`${err}`);
-        }
-      } else {
-        this.error(RED._("graphql-in.errors.not-created"));
+                ? "POST"
+                : null;
+        node.status({
+          fill: "green",
+          shape: "dot",
+          text: `${statusmsg}`,
+        });
+        paths[node.path] = node.path;
+        console.log(`🚀  Graphql server running at ${node.serverURL}`);
+      } catch (err) {
+        node.status({
+          fill: "red",
+          shape: "dot",
+          text: `${RED._("graphql-in.errors.internalerror", { error: err.message })}`,
+        });
+        // RED.notify here?
+        console.log(`${err}`);
+        this.error(`${err}`);
       }
+    } else {
+      this.error(RED._("graphql-in.errors.not-created"));
+    }
 
 
-    
 
 
-  
+
+
     // #endregion
 
     this.on("close", function () {
