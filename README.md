@@ -8,7 +8,7 @@ The server uses the javascript reference implementation of the GraphQL specifica
 To install the stable version use the Menu - Manage palette option and search for node-red-contrib-graphql-server ,
 or Run the following command in your Node-RED user directory - typically `~/.node-red`
 
-Note: Requries Node-RED version 1.3 or higher. Requires NodeJs version 11.15 or higher
+*Note*: Requries Node-RED version 1.3 or higher. Requires NodeJs version 11.15 or higher
 
     npm install node-red-contrib-graphql-server --engine-strict
 
