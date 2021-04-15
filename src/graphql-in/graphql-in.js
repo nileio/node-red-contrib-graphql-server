@@ -174,6 +174,7 @@ module.exports = function (RED) {
             );
           },
           // we need to use .get & .post rather than .use in order to be able to identity and remove the routes on re-deploy
+          //TODO: let subscription server sent to the Playground be anywhere , that is does not need to be hosted on same server. enable a full path starting with protocol
           getMiddlewares = node.graphi
             ? [
               httpMiddleware,
