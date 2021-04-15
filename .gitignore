@@ -75,3 +75,4 @@ node_modules/
 #project specific
 .graphqlconfig
 examples/snippets.md
+examples/starwars_data
