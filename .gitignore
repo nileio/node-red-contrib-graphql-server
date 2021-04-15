@@ -76,3 +76,4 @@ node_modules/
 .graphqlconfig
 examples/snippets.md
 examples/starwars_data
+examples/chinook.sqlite
