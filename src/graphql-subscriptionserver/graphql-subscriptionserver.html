@@ -27,7 +27,7 @@ SOFTWARE.
     resources are loaded from static content on the server configured in settings file
 -->
 
-<script type="text/x-red" data-template-name="graphql-subscriptionserver">
+<script type="text/html" data-template-name="graphql-subscriptionserver">
 
    <div class="form-row">
     <label for="node-input-subscriptionspath"><i class="fa fa-globe"></i> <span data-i18n="graphql-subscriptionserver.label.subscriptionspath"></span></label>
@@ -64,8 +64,7 @@ SOFTWARE.
       subscriptionspath: { value: "/subscriptions", required: true },
       module: { value: "pubsubmqtt", required: true },
       mqttbroker: { required: true, type: "mqtt-broker" },
-      schema: {  required: true, type: "graphql-schema" },
-      
+      schema: { required: true, type: "graphql-schema" },
     },
     inputs: 0,
     outputs: 1,
@@ -86,7 +85,6 @@ SOFTWARE.
     oneditsave: function () {
       const node = this;
       if (!$("#node-input-subscriptionspath").val()) $("#node-input-subscriptionspath").val("/subscriptions");
-
     },
   });
 

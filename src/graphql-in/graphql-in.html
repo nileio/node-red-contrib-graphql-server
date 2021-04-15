@@ -26,7 +26,7 @@ SOFTWARE.
 
 <!-- Editor HTML and client Javascript -->
 
-<script type="text/x-red" data-template-name="graphql-in">
+<script type="text/html" data-template-name="graphql-in">
   <div class="form-row">
     <label for="node-input-path"><i class="fa fa-globe"></i> <span data-i18n="graphql-in.label.path"></span></label>
     <input type="text" id="node-input-path" data-i18n="[placeholder]graphql-in.placeholder.path" style="width: 35%" />
@@ -37,26 +37,29 @@ SOFTWARE.
         <option value="getonly">GET only</option>
         <option value="postonly">POST only</option>
       </select>
-      <span class="hide" id="gql_serverimg" style="padding-left: 10px"><a id="gql_serverimg-url" href="#"
-        target="_blank">🌐</a></span>
+      <span class="hide" id="gql_serverimg" style="padding-left: 10px"><a id="gql_serverimg-url" href="#" target="_blank">🌐</a></span>
     </div>
-
   </div>
-  <div class="form-row hide" id="graphi-row" >
-    <label for="node-input-graphi"><i><img src="icons/node-red-contrib-graphql-server/graphql_logo_black.svg" width="14px" height="14px"></i> <span data-i18n="graphql-in.label.graphi"></span></label>
+  <div class="form-row hide" id="graphi-row">
+    <label for="node-input-graphi"
+      ><i><img src="icons/node-red-contrib-graphql-server/graphql_logo_black.svg" width="14px" height="14px" /></i>
+      <span data-i18n="graphql-in.label.graphi"></span
+    ></label>
     <a href="#" id="graphi-toggle">
       <span id="graphi-toggle-off" style="padding-left: 3px"><i class="fa fa-toggle-off fa-lg"></i></span>
       <span id="graphi-toggle-on" style="padding-left: 3px"><i class="fa fa-toggle-on fa-lg"></i></span>
     </a>
     <input class="hide" type="checkbox" id="node-input-graphi" />
     <div class="form-row hide" id="row-input-useSubscriptionServer" style="display: inline; padding-left: 5px">
-      <label style="width: auto !important" for="node-input-subscriptionsPath"
-        data-i18n="graphql-in.label.subscriptionsPath"></label>
-      <input type="text" id="node-input-subscriptionsPath"
-          data-i18n="[placeholder]graphql-in.placeholder.subscriptionsPath" style="width: 35%;padding-left: 5px" />
+      <label style="width: auto !important" for="node-input-subscriptionsPath" data-i18n="graphql-in.label.subscriptionsPath"></label>
+      <input
+        type="text"
+        id="node-input-subscriptionsPath"
+        data-i18n="[placeholder]graphql-in.placeholder.subscriptionsPath"
+        style="width: 35%;padding-left: 5px"
+      />
       <input class="hide" type="checkbox" id="node-input-useSubscriptionServer" />
     </div>
-
   </div>
 
   <div class="form-row">
@@ -65,8 +68,7 @@ SOFTWARE.
   </div>
 
   <div class="form-row">
-    <label for="node-input-resolverstype"><i class="fa fa-cogs"></i> <span
-        data-i18n="graphql-in.label.resolverstype"></span></label>
+    <label for="node-input-resolverstype"><i class="fa fa-cogs"></i> <span data-i18n="graphql-in.label.resolverstype"></span></label>
     <select type="text" id="node-input-resolverstype" style="width: auto">
       <option value="rootonly" data-i18n="graphql-in.label.rootonly"></option>
       <option value="nonscalar" data-i18n="graphql-in.label.nonscalar"></option>
@@ -74,20 +76,15 @@ SOFTWARE.
     </select>
 
     <div class="form-row" style="display: inline; padding-left: 5px">
-      <label for="node-input-timeout" style="width: auto;">
-        <span data-i18n="graphql-in.label.timeout"></span></label>
-      <input type="number" id="node-input-timeout" data-i18n="[placeholder]graphql-in.placeholder.timeout"
-        style="width: 78px" />
+      <label for="node-input-timeout" style="width: auto;"> <span data-i18n="graphql-in.label.timeout"></span></label>
+      <input type="number" id="node-input-timeout" data-i18n="[placeholder]graphql-in.placeholder.timeout" style="width: 78px" />
     </div>
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-usedataloader"
-      style="display: inline-block; margin-left: 0px; vertical-align: top; width: auto !important" />
-    <label style="width: auto !important" for="node-input-usedataloader"
-      data-i18n="graphql-in.label.usedataloader"></label>
+    <input type="checkbox" id="node-input-usedataloader" style="display: inline-block; margin-left: 0px; vertical-align: top; width: auto !important" />
+    <label style="width: auto !important" for="node-input-usedataloader" data-i18n="graphql-in.label.usedataloader"></label>
   </div>
-
 
   <div class="form-row node-resolvers-cont node-input-target-list-row hide" style="height: 60%; min-height: 120px">
     <img src="icons/node-red-contrib-graphql-server/spinning-circles.svg" alt="loading data..." id="loading-svg" style="display: none; width: 16px" />
@@ -110,8 +107,7 @@ SOFTWARE.
     </span>
     <span class="hide" id="voyager-endpoint" style="padding-left: 15px">
       <input type="text" id="node-settings-voyagerendpoint" value="/graphql-voyager" style="width: auto" disabled />
-      <span class="hide" id="node-voyager-url" style="padding-left: 5px"><a id="voyager-url" href="#"
-          target="_blank">🛰️</a></span>
+      <span class="hide" id="node-voyager-url" style="padding-left: 5px"><a id="voyager-url" href="#" target="_blank">🛰️</a></span>
     </span>
   </div>
 </script>
@@ -207,7 +203,6 @@ SOFTWARE.
         $("#graphi-toggle-off").toggle(!checked);
         $("#gql_serverimg").toggle(checked);
         $("#row-input-useSubscriptionServer").toggle(checked);
-
       });
       // $("#node-input-useSubscriptionServer").change(function () {
       //   const checked = $("#node-input-useSubscriptionServer").prop("checked");
