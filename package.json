@@ -4,7 +4,7 @@
   "description": "A set of nodes to run a local GraphQL Server in Node-RED",
   "scripts": {
     "maps": "genmaps --sourceRoot /src/ -o html,js",
-    "debug": "genmaps --sourceRoot /src/ -o html && node --nolazy --inspect-brk=9229 /usr/local/lib/node_modules/node-red/red.js",
+    "debug": "genmaps --sourceRoot /src/ -o html && node --nolazy --inspect /usr/local/lib/node_modules/node-red/red.js",
     "debugnode": "node --nolazy --inspect-brk=9229 /usr/local/lib/node_modules/node-red/red.js",
     "start": "node /usr/local/lib/node_modules/node-red/red.js",
     "test": "mocha \"test/**/*_spec.js\"",
