@@ -82,3 +82,8 @@ Copy the below example flow below
 
 - I also included another more advanced example which uses a sqlite version of the [chinook database](https://github.com/lerocha/chinook-database)
   The database is located in the example folder of the node. The example flow is a more advanced example using Pagination.
+
+
+# Thanks
+
+If you using the node or if you like it, at least hit the Star button or leave a comment.
