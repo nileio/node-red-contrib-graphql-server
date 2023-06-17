@@ -29,8 +29,8 @@ module.exports = function (RED) {
 
   const { makeExecutableSchema } = require("graphql-tools");
   const { graphqlHTTP } = require("express-graphql"),
-    expressPlayground = require("graphql-playground-middleware-express")
-      .default;
+    expressPlayground =
+      require("graphql-playground-middleware-express").default;
 
   const DataLoader = require("dataloader");
   const { execute } = require("graphql");
@@ -88,11 +88,12 @@ module.exports = function (RED) {
     // #endregion
 
     // #region ** GraphQL server route implementation **
-    // server = RED.server; 
+    // server = RED.server;
 
     if (RED.settings.httpNodeRoot !== false) {
       try {
         const proto = RED.settings.requireHttps ? "https" : "http";
+
         node.serverURL = `${proto}://${RED.settings.uiHost}:${RED.settings.uiPort}${node.path}`;
         if (!node.path) {
           this.error(RED._("graphql-in.errors.missing-path"));
@@ -134,9 +135,9 @@ module.exports = function (RED) {
         }
 
         const errorHandler = function (err, _req, res, _next) {
-          node.warn(err);
-          res.sendStatus(500);
-        },
+            node.warn(err);
+            res.sendStatus(500);
+          },
           extensions = ({
             document,
             variables,
@@ -174,28 +175,28 @@ module.exports = function (RED) {
             );
           },
           // we need to use .get & .post rather than .use in order to be able to identity and remove the routes on re-deploy
-          //TODO: let subscription server sent to the Playground be anywhere , that is does not need to be hosted on same server. enable a full path starting with protocol
+          // TODO: let subscription server sent to the Playground be anywhere , that is does not need to be hosted on same server. enable a full path starting with protocol
           getMiddlewares = node.graphi
             ? [
-              httpMiddleware,
-              corsHandler,
-              expressPlayground({
-                endpoint: node.path,
-                subscriptionEndpoint: node.useSubscriptionServer
-                  ? `${proto === "https" ? "wss" : "ws"}://${
-                  RED.settings.uiHost
-                  }:${RED.settings.uiPort}${node.subscriptionsPath}`
-                  : undefined,
-              }),
-              graphQLMiddleware(node.usedataloader),
-              errorHandler,
-            ]
+                httpMiddleware,
+                corsHandler,
+                expressPlayground({
+                  endpoint: node.path,
+                  subscriptionEndpoint: node.useSubscriptionServer
+                    ? `${proto === "https" ? "wss" : "ws"}://${
+                        RED.settings.uiHost
+                      }:${RED.settings.uiPort}${node.subscriptionsPath}`
+                    : undefined,
+                }),
+                graphQLMiddleware(node.usedataloader),
+                errorHandler,
+              ]
             : [
-              httpMiddleware,
-              corsHandler,
-              graphQLMiddleware(node.usedataloader),
-              errorHandler,
-            ];
+                httpMiddleware,
+                corsHandler,
+                graphQLMiddleware(node.usedataloader),
+                errorHandler,
+              ];
 
         if (node.method === "getandpost" || node.method === "getonly") {
           RED.httpNode.get(node.path, getMiddlewares);
@@ -214,10 +215,11 @@ module.exports = function (RED) {
           node.method === "getandpost"
             ? "GET/POST"
             : node.method === "getonly"
-              ? "GET"
-              : node.method === "postonly"
-                ? "POST"
-                : null;
+            ? "GET"
+            : node.method === "postonly"
+            ? "POST"
+            : null;
+
         node.status({
           fill: "green",
           shape: "dot",
@@ -229,7 +231,9 @@ module.exports = function (RED) {
         node.status({
           fill: "red",
           shape: "dot",
-          text: `${RED._("graphql-in.errors.internalerror", { error: err.message })}`,
+          text: `${RED._("graphql-in.errors.internalerror", {
+            error: err.message,
+          })}`,
         });
         // RED.notify here?
         console.log(`${err}`);
@@ -238,11 +242,6 @@ module.exports = function (RED) {
     } else {
       this.error(RED._("graphql-in.errors.not-created"));
     }
-
-
-
-
-
 
     // #endregion
 
@@ -371,5 +370,3 @@ module.exports = function (RED) {
   //   }
   // });
 };
-
-// # sourceMappingURL=/src/graphql-in/graphql-in.js.map

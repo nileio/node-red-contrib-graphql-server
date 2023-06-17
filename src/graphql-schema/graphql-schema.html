@@ -106,9 +106,8 @@ SOFTWARE.
       $("#node-config-editor-edit").toggle(checked);
       $("#editor-toggle-off").toggle(!checked);
       if (checked) {
-        const url = `${graphqlSchemaSettings.https ? "https" : "http"}://${graphqlSchemaSettings.uiHost}:${graphqlSchemaSettings.uiPort}${
-          graphqlSchemaSettings.httpAdminRoot ? graphqlSchemaSettings.httpAdminRoot : "/"
-        }graphql-schema/editor?id=${node.id}`;
+        const url = `${graphqlSchemaSettings.https ? "https" : "http"}://${graphqlSchemaSettings.uiHost}:${graphqlSchemaSettings.uiPort}${graphqlSchemaSettings.httpAdminRoot ? graphqlSchemaSettings.httpAdminRoot : "/"
+          }graphql-schema/editor?id=${node.id}`;
         $("#editor-edit").attr("href", url);
       } else {
         $("#editor-tip").show();
@@ -130,6 +129,4 @@ SOFTWARE.
     },
   });
 
-  //# sourceURL=/src/graphql-schema/graphql-schema.html
-  //# sourceMappingURL=/src/graphql-schema/graphql-schema.html.map
 </script>
