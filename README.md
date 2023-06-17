@@ -3,6 +3,8 @@
 A set of nodes for <a href="http://nodered.org" target="_new">Node-RED</a> to run a local GraphQL Server.
 The server uses the javascript reference implementation of the GraphQL specification.
 
+<a href="https://www.buymeacoffee.com/nileio"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=nileio&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+
 ## Install
 
 To install the stable version use the Menu - Manage palette option and search for node-red-contrib-graphql-server ,
@@ -83,7 +85,19 @@ Copy the below example flow below
 - I also included another more advanced example which uses a sqlite version of the [chinook database](https://github.com/lerocha/chinook-database)
   The database is located in the example folder of the node. The example flow is a more advanced example using Pagination.
 
+*GraphQL Voyager*
+
+
+![starwars_schema](https://github.com/nileio/node-red-contrib-graphql-server/assets/24714766/37a366df-5f9b-476a-9239-669384d44161)
+
+
+
+
 
 # Thanks
 
-If you using the node or if you like it, at least hit the Star button or leave a comment.
+A lot of time and effort has gone into the development for this project. Please support me by hitting the star button and kindly consider a small donation.
+
+<a href="https://www.buymeacoffee.com/nileio"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=nileio&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+
+
