@@ -87,6 +87,10 @@ Copy the below example flow below
 
 _GraphQL Voyager_
 
+![starwars_schema](https://github.com/nileio/node-red-contrib-graphql-server/assets/24714766/eeef4651-3f36-4c5e-a603-abb4357701d7)
+
+
+
 Thank You
 
 A lot of time and effort has gone into the development for this project. Please support me by hitting the star button.
